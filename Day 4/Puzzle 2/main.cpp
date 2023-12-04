@@ -33,8 +33,8 @@ int main() {
             if (winningNumbers.find(number) != winningNumbers.end())
                 score++;
 
-        score += i+1;
-        for (int j = i+1; j < score; j++)
+        score += i;
+        for (int j = i+1; j <= score; j++)
             copiesOfCard[j] += copiesOfCard[i];
 
         sum += copiesOfCard[i];
