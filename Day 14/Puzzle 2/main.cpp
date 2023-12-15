@@ -8,6 +8,9 @@
 
 #define CYCLES 1000000000
 
+// 1000
+// 1000000
+
 struct Stone {
     size_t x, y;
 };
@@ -48,6 +51,7 @@ int main() {
             if (std::find(cycles.begin(), cycles.end(), currentCycle) != cycles.end()) {
                 auto it = std::find(cycles.begin(), cycles.end(), currentCycle);
                 size_t startOfCycle = std::distance(cycles.begin(), it);
+                std::cout << cycleLength << std::endl;
 
                 if (i - startOfCycle == cycleLength) {
                     cycleFound = true;
