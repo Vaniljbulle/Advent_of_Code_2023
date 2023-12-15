@@ -54,13 +54,9 @@ int main() {
         if(input[c] == ',') {
             current = "";
             continue;
-        } else if(input[c] == '=') {
-            replaceOrEmplace(boxes[boxHash(current)], current, input[c+1] - '0');
-            continue;
-        } else if(input[c] == '-') {
-            remove(boxes[boxHash(current)], current);
-            continue;
         }
+        else if(input[c] == '=') replaceOrEmplace(boxes[boxHash(current)], current, input[c+1] - '0');
+        else if(input[c] == '-') remove(boxes[boxHash(current)], current);
         current += input[c];
     }
 
