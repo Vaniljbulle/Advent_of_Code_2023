@@ -54,7 +54,7 @@ bool move(std::unordered_map<Point, std::unordered_set<Point>> &energizedCells, 
 }
 
 void energize(std::unordered_map<Point, std::unordered_set<Point>> &energizedCells, std::pair<Point, Point> &current, const std::vector<std::string> &grid) {
-    while (energizedCells[current.first].insert(current.second).second && move(energizedCells, current, grid));
+    while (move(energizedCells, current, grid) && energizedCells[current.first].insert(current.second).second);
 }
 
 int main() {
@@ -67,7 +67,7 @@ int main() {
     }
     fIn.close();
 
-    std::pair<Point, Point> start = {{0, 0}, DOWN}; // '\' at 0,0 for my input
+    std::pair<Point, Point> start = {{-1, 0}, RIGHT};
     std::unordered_map<Point, std::unordered_set<Point>> energizedCells;
     energize(energizedCells, start, grid);
 

@@ -16,6 +16,10 @@ struct Point {
     Point operator+(const Point &other) const {
         return {x + other.x, y + other.y};
     }
+
+    Point operator-(const Point &other) const {
+        return {x - other.x, y - other.y};
+    }
 } const UP = {0, -1}, DOWN = {0, 1}, LEFT = {-1, 0}, RIGHT = {1, 0};
 
 namespace std {
@@ -55,38 +59,18 @@ bool move(std::unordered_map<Point, std::unordered_set<Point>> &energizedCells, 
 }
 
 void energize(std::unordered_map<Point, std::unordered_set<Point>> &energizedCells, std::pair<Point, Point> &current, const std::vector<std::string> &grid) {
-    while (energizedCells[current.first].insert(current.second).second && move(energizedCells, current, grid));
+    while (move(energizedCells, current, grid) && energizedCells[current.first].insert(current.second).second);
 }
 
-int processLine(const std::vector<std::string>& grid, int index, bool isRow) {
+int processLine(const std::vector<std::string>& grid, int index, bool isRow, Point direction) {
     int startIdx = isRow ? 1 : 0;
     int endIdx = isRow ? (grid[0].size() - 1) : grid.size();
     int max = 0;
     for (int i = startIdx; i < endIdx; ++i) {
         std::unordered_map<Point, std::unordered_set<Point>> energizedCells;
-        std::pair<Point, Point> start;
-        char cell = isRow ? grid[index][i] : grid[i][index];
-        Point direction, position = isRow ? Point{i, index} : Point{index, i};
+        Point position = isRow ? Point{i, index} : Point{index, i};
+        std::pair<Point, Point> start = {position - direction, direction};
 
-        switch (cell) {
-            case '\\': direction = isRow ? (index == 0 ? RIGHT : LEFT) : (index == 0 ? DOWN : UP); break;
-            case '/': direction = isRow ? (index == 0 ? LEFT : RIGHT) : (index == 0 ? UP : DOWN); break;
-            case '-': if (isRow) {
-                    direction = RIGHT;
-                    std::pair<Point, Point> start2 = {position, LEFT};
-                    energize(energizedCells, start2, grid);
-                    break;
-                }
-            case '|': if (!isRow) {
-                    direction = DOWN;
-                    std::pair<Point, Point> start2 = {position, UP};
-                    energize(energizedCells, start2, grid);
-                    break;
-                }
-            default: direction = isRow ? (index == 0 ? DOWN : UP) : (index == 0 ? RIGHT : LEFT);
-        }
-
-        start = {position, direction};
         energize(energizedCells, start, grid);
         max = std::max(max, (int)energizedCells.size());
     }
@@ -105,10 +89,10 @@ int main() {
 
     int max = 0;
 
-    max = std::max(max, processLine(grid, 0, true));
-    max = std::max(max, processLine(grid, 0, false));
-    max = std::max(max, processLine(grid, grid[0].size() - 1, false));
-    max = std::max(max, processLine(grid, grid.size() - 1, true));
+    max = std::max(max, processLine(grid, 0, true, DOWN));
+    max = std::max(max, processLine(grid, 0, false, RIGHT));
+    max = std::max(max, processLine(grid, grid[0].size() - 1, false, LEFT));
+    max = std::max(max, processLine(grid, grid.size() - 1, true, UP));
 
     std::cout << max << std::endl;
     return 0;
