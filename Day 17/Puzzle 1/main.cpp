@@ -54,7 +54,7 @@ int main() {
 
         if (current.position.x == (int)grid.size() - 1 && current.position.y == (int)grid[0].size() - 1) {
             heatLoss = min(heatLoss, current.heat);
-            continue;
+            break;
         }
 
         for (int i = 0; i < 4; ++i) {
